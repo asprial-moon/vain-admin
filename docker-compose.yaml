@@ -1,0 +1,53 @@
+version: '3'
+services:
+  nginx:
+    container_name: vain-nginx
+    image: nginx
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/logs:/var/log/nginx
+      - ./nginx/dist:/etc/nginx/dist
+    links:
+      - vain
+      
+  redis:
+    container_name: vain-redis
+    image: redis:4-alpine             
+    ports:                                  
+      - "6378:6378"
+    volumes:                                
+      - ./redis/data:/redis/data
+      - ./redis/config/redis.conf:/etc/redis/redis.conf
+    command: redis-server --requirepass redis123
+    
+  mysql:
+    container_name: vain-mysql
+    image: mysql:5.7
+    ports:
+      - "3303:3306"
+    command: mysqld
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
+      - ./mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: vain
+      MYSQL_ROOT_PASSWORD: vain123
+      
+  vain:
+    build: 
+      context: .
+      dockerfile: /manager/vain.dockerfile
+    working_dir: /manager
+    volumes:
+      - ./manager:/manager
+      - ~/.m2:/root/.m2
+      - /tmp/logs:/usr/local/logs
+    ports:
+      - "8080:8080"
+    command: bash -c "mvn clean package && java -jar ./web/target/web-1.0-SNAPSHOT.jar" 
+    depends_on:
+      - redis
+      - mysql

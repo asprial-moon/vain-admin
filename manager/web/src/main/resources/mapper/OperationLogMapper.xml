@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.vain.mapper.OperationLogMapper">
+
+    <insert id="insert" parameterType="com.vain.entity.OperationLog" useGeneratedKeys="true"
+            keyProperty="id">
+    INSERT INTO t_operation_log
+    (operationType,operationData,operationIP,className,methodName,createTime,info,exceptionMessage,userId)
+    VALUES
+    (#{operationType},#{operationData},#{operationIP},#{className},#{methodName},now(),#{info},#{exceptionMessage},#{userId})
+    </insert>
+
+    <select id="getList" parameterType="com.vain.entity.OperationLog"
+            resultType="com.vain.entity.OperationLog">
+        SELECT *,
+        (SELECT userName FROM t_user WHERE id = userId)AS userName FROM t_operation_log
+        <where>
+            <if test="operationType!=null">
+                AND operationType = #{operationType}
+            </if>
+            <if test="operationTypes!=null">
+                AND operationType IN
+                <foreach collection="operationTypes" item="type" separator="," open="(" close=")">
+                    #{type}
+                </foreach>
+            </if>
+        </where>
+        ORDER  BY createTime DESC
+    </select>
+
+    <delete id="delete" parameterType="com.vain.entity.OperationLog">
+        DELETE FROM t_operation_log
+        <where>
+            <if test="id!=null">
+                AND id = #{id}
+            </if>
+            <if test="ids!=null">
+                AND id IN
+                <foreach collection="ids" item="id" separator="," open="(" close=")">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+</mapper>
