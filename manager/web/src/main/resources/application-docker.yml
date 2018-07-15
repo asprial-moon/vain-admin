@@ -6,9 +6,9 @@ spring:
   profiles:
     active: docker
   datasource:
-    url: jdbc:mysql://mysql:3303/vain?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    url: jdbc:mysql://mysql:3306/vain?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
     username: vain
-    password: vain123
+    password: 123456
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     platform: mysql
@@ -42,22 +42,23 @@ spring:
     host: redis
     database: 0
     port: 6379
-    password:
+    password: redis123
     timeout: 10000
     jedis:
       pool:
         max-active: 8
-        max-wait: 1ms
+        max-wait: 10ms
         max-idle: 8
         min-idle: 1
   boot:
     admin:
       client:
-        url: http://localhost:8000
+        url: http://monitor:8000
         instance:
           name: vain-admin
 logging:
   config: classpath:log4j2.xml
+  file: logs/vain.log
 management:
   endpoints:
     web:

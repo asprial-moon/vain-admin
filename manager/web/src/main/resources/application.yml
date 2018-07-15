@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/vain?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
     username: root
-    password:
+    password: vain123
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     platform: mysql
@@ -45,7 +45,7 @@ spring:
     jedis:
       pool:
         max-active: 8
-        max-wait: 1ms
+        max-wait: 10ms
         max-idle: 8
         min-idle: 1
   boot:
@@ -56,6 +56,7 @@ spring:
           name: vain-admin
 logging:
   config: classpath:log4j2.xml
+  file: logs/vain.log
 management:
   endpoints:
     web:
