@@ -68,7 +68,7 @@
  访问http://127.0.0.1/即可  
  Spring Boot Admin 的访问地址为http://127.0.0.1:8080
  更多SpringBootAdmin功能请参考[vueAdmin-template](https://github.com/codecentric/spring-boot-admin)
- ![SpringBootAdmin界面](https://github.com/vainhope/vain-admin/master/screenshots/admin.png)
+ ![SpringBootAdmin界面](https://github.com/vainhope/vain-admin/raw/master/screenshots/admin.png)
  ![SpringBootAdmin Debug界面](https://github.com/vainhope/vain-admin/raw/master/screenshots/admin-debug.png)
  ![SpringBootAdmin 详情界面](https://github.com/vainhope/vain-admin/raw/master/screenshots/admin-detail.png)
  ![SpringBootAdmin 日志界面](https://github.com/vainhope/vain-admin/raw/master/screenshots/admin-logfile.png)
