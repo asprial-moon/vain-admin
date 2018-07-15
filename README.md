@@ -42,15 +42,21 @@
  
  前端项目默认为8088端口  
  运行web项目
- 按照nginx/conf配置本地的nginx配置
+ 按照nginx/conf配置本地的nginx配置  
  访问本地环境访问http://127.0.0.1/  
-  ![vain-admin登录](https://github.com/vainhope/vain-admin/master/screenshots/vain-admin.png)
-  ![vain-admin配置](https://github.com/vainhope/vain-admin/master/screenshots/vain-admin-config.png)
-  ![vain-admin日志](https://github.com/vainhope/vain-admin/master/screenshots/vain-admin-log.png)
-  ![vain-admin菜单](https://github.com/vainhope/vain-admin/master/screenshots/vain-admin-menu.png)
-  ![vain-admin定时](https://github.com/vainhope/vain-admin/master/screenshots/vain-admin-schedule.png)
-  ![vain-admin用户](https://github.com/vainhope/vain-admin/master/screenshots/vain-admin-user.png)
+  ![vain-admin登录](https://github.com/vainhope/vain-admin/raw/master/screenshots/vain-admin.png)
+  ![vain-admin配置](https://github.com/vainhope/vain-admin/raw/master/screenshots/vain-admin-config.png)
+  ![vain-admin日志](https://github.com/vainhope/vain-admin/raw/master/screenshots/vain-admin-log.png)
+  ![vain-admin菜单](https://github.com/vainhope/vain-admin/raw/master/screenshots/vain-admin-menu.png)
+  ![vain-admin定时](https://github.com/vainhope/vain-admin/raw/master/screenshots/vain-admin-schedule.png)
+  ![vain-admin用户](https://github.com/vainhope/vain-admin/raw/master/screenshots/vain-admin-user.png)
 
+#### 打包静态文件
+ 现将config下的prod.env.js中BASE_API修改为改动后的IP地址  
+ 在web分支中运行
+ > npm install prod.env.js  
+ 
+ 将生成后的dist文件拷贝到nginx的dist的目录下
 
 #### docker环境运行
  安装完成docker,docker-compose  
@@ -63,8 +69,8 @@
  Spring Boot Admin 的访问地址为http://127.0.0.1:8080
  更多SpringBootAdmin功能请参考[vueAdmin-template](https://github.com/codecentric/spring-boot-admin)
  ![SpringBootAdmin界面](https://github.com/vainhope/vain-admin/master/screenshots/admin.png)
- ![SpringBootAdmin Debug界面](https://github.com/vainhope/vain-admin/master/screenshots/admin-debug.png)
- ![SpringBootAdmin 详情界面](https://github.com/vainhope/vain-admin/master/screenshots/admin-detail.png)
- ![SpringBootAdmin 日志界面](https://github.com/vainhope/vain-admin/master/screenshots/admin-logfile.png)
- ![SpringBootAdmin 线程界面](https://github.com/vainhope/vain-admin/master/screenshots/admin-thread.png)
+ ![SpringBootAdmin Debug界面](https://github.com/vainhope/vain-admin/raw/master/screenshots/admin-debug.png)
+ ![SpringBootAdmin 详情界面](https://github.com/vainhope/vain-admin/raw/master/screenshots/admin-detail.png)
+ ![SpringBootAdmin 日志界面](https://github.com/vainhope/vain-admin/raw/master/screenshots/admin-logfile.png)
+ ![SpringBootAdmin 线程界面](https://github.com/vainhope/vain-admin/raw/master/screenshots/admin-thread.png)
 
