@@ -66,6 +66,7 @@
  > docker-compose up -d
  
  访问http://127.0.0.1/即可  
+ 登录账号为admin 密码为a12345  
  Spring Boot Admin 的访问地址为http://127.0.0.1:8080
  更多SpringBootAdmin功能请参考[vueAdmin-template](https://github.com/codecentric/spring-boot-admin)
  ![SpringBootAdmin界面](https://github.com/vainhope/vain-admin/raw/master/screenshots/admin.png)

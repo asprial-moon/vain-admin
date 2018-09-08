@@ -43,7 +43,7 @@ public abstract class UploaderFileComponent {
         }
         WriteRender wr = null;
         try (ByteArrayOutputStream outStream = new ByteArrayOutputStream()) {
-            // 获取图片的宽高
+            // 获取图片的宽高1
             BufferedImage read = ImageIO.read(inputStream);
             uploadFile.setWidth(read.getWidth());
             uploadFile.setHeight(read.getHeight());

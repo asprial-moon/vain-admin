@@ -4,6 +4,7 @@ package com.vain.base.controller;
 import com.vain.base.entity.Entity;
 import com.vain.common.ErrorCodeException;
 import com.vain.enums.StatusCode;
+import com.vain.util.HttpContext;
 import com.vain.util.StringUtils;
 import com.vain.util.TokenUtils;
 import io.jsonwebtoken.Claims;
@@ -23,10 +24,8 @@ public abstract class AbstractBaseController<T extends Entity> implements BaseCo
         throw new ErrorCodeException(statusCode.getCode(), statusCode.getMessage());
     }
 
-    protected Integer getCurrentUserId(HttpServletRequest request) {
-        if (null == request) {
-            return 0;
-        }
+    protected Integer getCurrentUserId() {
+        HttpServletRequest request = HttpContext.getRequest();
         String token = request.getHeader("Token");
         if (StringUtils.isEmpty(token)) {
             return null;

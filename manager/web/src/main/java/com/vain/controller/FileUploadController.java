@@ -41,10 +41,10 @@ public class FileUploadController extends AbstractBaseController<UploadFile> {
      * 图片上传接口
      */
     @RequestMapping(value = "/uploadPics", method = RequestMethod.POST)
-    public void uploadPics(@RequestParam("file") MultipartFile[] files, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void uploadPics(@RequestParam("file") MultipartFile[] files, HttpServletResponse response) throws Exception {
         Response<UploadFile> res = new Response<>();
         List<UploadFile> pics = new ArrayList<>();
-        Integer currentUserId = getCurrentUserId(request);
+        Integer currentUserId = getCurrentUserId();
         for (MultipartFile file : files) {
             UploadFile uploadFile = new UploadFile(UploadFileType.PHOTO.getType());
             uploadFile.setName(file.getOriginalFilename());

@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.vain.constant.SystemConfigKeys;
 import com.vain.dao.IRedisDao;
 import com.vain.log.OperationLog;
+import com.vain.pool.ThreadPool;
+import com.vain.util.HttpContext;
 import com.vain.util.StringUtils;
 import com.vain.util.TokenUtils;
 import com.vain.utils.FieldsUtils;
@@ -36,6 +38,9 @@ public class OperationLogAspect {
     @Autowired
     private IRedisDao redisDao;
 
+    @Autowired
+    private ThreadPool pool;
+
     private static final Logger logger = LoggerFactory.getLogger(OperationLogAspect.class);
 
     /**
@@ -54,7 +59,12 @@ public class OperationLogAspect {
 
     @AfterReturning(pointcut = "logPoint()")
     public void doAfter(JoinPoint joinPoint) {
-        logServiceHandler(joinPoint, null);
+        //在当前线程先获取请求中信息
+        com.vain.entity.OperationLog log = new com.vain.entity.OperationLog();
+        setParameterFromRequest(log);
+        pool.execute(() -> {
+            logServiceHandler(joinPoint, null, log);
+        });
     }
 
     /**
@@ -63,7 +73,7 @@ public class OperationLogAspect {
      * @param joinPoint
      * @param e
      */
-    private void logServiceHandler(JoinPoint joinPoint, Exception e) {
+    private void logServiceHandler(JoinPoint joinPoint, Exception e, com.vain.entity.OperationLog log) {
         Signature signature = joinPoint.getSignature();
         if (!(signature instanceof MethodSignature)) {
             throw new IllegalArgumentException("注解只能用于方法上");
@@ -74,7 +84,6 @@ public class OperationLogAspect {
             OperationLog operationLog = method.getAnnotation(OperationLog.class);
             if (operationLog != null) {
                 try {
-                    com.vain.entity.OperationLog log = new com.vain.entity.OperationLog();
                     // 拦截的方法参数
                     String classType = joinPoint.getTarget().getClass().getName();
                     Class<?> clazz = Class.forName(classType);
@@ -104,15 +113,6 @@ public class OperationLogAspect {
                         log.setOperationData(JSONObject.toJSONString(map));
                         logger.info(">>>>>>>>>拦截到的参数为:{}", map);
                     }
-                    if (joinPoint.getArgs().length > 1) {
-                        for (Object paramter : joinPoint.getArgs()) {
-                            //从请求头中取出操作用户ID
-                            if (paramter instanceof HttpServletRequest) {
-                                setParameterFromRequest((HttpServletRequest) paramter, log);
-                            }
-                        }
-
-                    }
                     log.setInfo(operationLog.info());
                     log.setOperationType(operationLog.operationType());
                     redisDao.rightPush(SystemConfigKeys.OPERATION_LOG_KEY, JSON.toJSONString(log));
@@ -135,29 +135,32 @@ public class OperationLogAspect {
     public void doAfterThrowing(JoinPoint joinPoint, Throwable e) {
         //请求方法的参数并序列化为JSON格式字符串
         com.vain.entity.OperationLog log = new com.vain.entity.OperationLog();
-        try {
-            String classType = joinPoint.getTarget().getClass().getName();
-            Class<?> clazz = Class.forName(classType);
-            String clazzName = clazz.getName();
-            String methodName = joinPoint.getSignature().getName();
-            log.setClassName(clazzName);
-            log.setMethodName(methodName);
-            log.setExceptionMessage(e.getMessage());
-            log.setInfo(e.getClass().getName());
-            StringBuilder params = new StringBuilder();
-            if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0) {
-                for (Object parameter : joinPoint.getArgs()) {
-                    params.append(JSON.toJSONString(parameter)).append(";");
-                    if (parameter instanceof HttpServletRequest) {
-                        setParameterFromRequest((HttpServletRequest) parameter, log);
+        setParameterFromRequest(log);
+        pool.execute(() -> {
+            try {
+                String classType = joinPoint.getTarget().getClass().getName();
+                Class<?> clazz = Class.forName(classType);
+                String clazzName = clazz.getName();
+                String methodName = joinPoint.getSignature().getName();
+                log.setClassName(clazzName);
+                log.setMethodName(methodName);
+                log.setExceptionMessage(e.getMessage());
+                log.setInfo(e.getClass().getName());
+                StringBuilder params = new StringBuilder();
+                if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0) {
+                    for (Object parameter : joinPoint.getArgs()) {
+                        params.append(JSON.toJSONString(parameter)).append(";");
+                        if (parameter instanceof HttpServletRequest) {
+                            setParameterFromRequest(log);
+                        }
                     }
                 }
+                log.setOperationData(params.toString());
+                redisDao.rightPush(SystemConfigKeys.OPERATION_LOG_KEY, JSON.toJSONString(log));
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
-            log.setOperationData(params.toString());
-            redisDao.rightPush(SystemConfigKeys.OPERATION_LOG_KEY, JSON.toJSONString(log));
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
+        });
         logger.info(">>>>>>>>>异常捕捉:{}", e.getMessage());
     }
 
@@ -165,19 +168,18 @@ public class OperationLogAspect {
     /**
      * 从请求头中获取必要参数
      *
-     * @param request
      * @param log
      */
-    private void setParameterFromRequest(HttpServletRequest request, com.vain.entity.OperationLog log) {
-        log.setOperationIP(request.getRemoteAddr());
+    private void setParameterFromRequest(com.vain.entity.OperationLog log) {
+        log.setOperationIP(HttpContext.getRemoteAddress());
+        HttpServletRequest request = HttpContext.getRequest();
         String token = request.getHeader(SystemConfigKeys.REQUEST_TOKEN);
-        if (StringUtils.isNumeric(token)) {
+        if (StringUtils.isNotEmpty(token)) {
             Claims claim = TokenUtils.getClaimFromToken(token);
             if (null != claim) {
                 log.setUserId((Integer) claim.get("id"));
             }
         }
-
     }
 
 }

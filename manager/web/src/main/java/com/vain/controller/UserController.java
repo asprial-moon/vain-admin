@@ -57,10 +57,10 @@ public class UserController extends AbstractBaseController<User> {
      * @throws Exception
      */
     @PostMapping(value = "/get")
-    public Response<User> get(@RequestBody User entity, HttpServletRequest request) {
+    public Response<User> get(@RequestBody User entity) {
         entity = new User();
         //只获取自己信息
-        Integer currentUserId = getCurrentUserId(request);
+        Integer currentUserId = getCurrentUserId();
         if (null == currentUserId) {
             return new Response<>();
         }
@@ -109,11 +109,11 @@ public class UserController extends AbstractBaseController<User> {
      * @throws Exception
      */
     @PostMapping(value = "/modifyPersonInfo")
-    public Response<User> modifyPersonInfo(@RequestBody User entity, HttpServletRequest request) {
+    public Response<User> modifyPersonInfo(@RequestBody User entity) {
         if (entity == null || entity.getId() == null) {
             throwNewErrorCodeException(StatusCode.PARAMETER_ERROR);
         }
-        if (!entity.getId().equals(getCurrentUserId(request))) {
+        if (!entity.getId().equals(getCurrentUserId())) {
             throwNewErrorCodeException(StatusCode.FORBIDDEN);
         }
         return new Response<User>().setData(userService.modify(entity));
@@ -215,11 +215,11 @@ public class UserController extends AbstractBaseController<User> {
      * @throws ErrorCodeException
      */
     @PostMapping(value = "/modifyPassword")
-    public Response modifyPassword(@RequestBody User entity, HttpServletRequest request) throws ErrorCodeException {
+    public Response modifyPassword(@RequestBody User entity) throws ErrorCodeException {
         if (entity == null || entity.getNewpasswd() == null) {
             throwNewErrorCodeException(StatusCode.PARAMETER_ERROR);
         }
-        entity.setId(getCurrentUserId(request));
+        entity.setId(getCurrentUserId());
         return new Response().setData(userService.resetPwd(entity));
     }
 
