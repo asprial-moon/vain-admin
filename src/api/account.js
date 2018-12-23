@@ -80,9 +80,17 @@ export function resetPassword(params) {
   })
 }
 
-export function modifyPassword(params) {
+export function modifyPersonInfo(params) {
   return request({
-    url: '/user/modifyPassword',
+    url: '/user/modifyPersonInfo',
+    method: 'post',
+    data: params
+  })
+}
+
+export function modifyPersonPassword(params) {
+  return request({
+    url: '/user/modifyPersonPassword',
     method: 'post',
     data: params
   })

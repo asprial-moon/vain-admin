@@ -1,11 +1,11 @@
 import { login, logout, getUserMenu } from '@/api/login'
-import { getToken, setToken, removeToken, getName, setName, removeName, getAvatar, setAvatar, removeAvatar } from '@/utils/auth'
+import { getToken, setToken, removeToken, getInformation, setInformation, removeInformation, setEnvironment, getEnvironment, removeEnvironment } from '@/utils/auth'
 
 const user = {
   state: {
     token: getToken(),
-    name: getName(),
-    avatar: getAvatar(),
+    information: getInformation(),
+    environment: getEnvironment(),
     roles: [],
     menus: []
   },
@@ -14,17 +14,17 @@ const user = {
     SET_TOKEN: (state, token) => {
       state.token = token
     },
-    SET_NAME: (state, name) => {
-      state.name = name
-    },
-    SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar
-    },
     SET_ROLES: (state, roles) => {
       state.roles = roles
     },
     SET_MENUS: (state, menus) => {
       state.menus = menus
+    },
+    SET_ENVIRONMENT: (state, environment) => {
+      state.environment = environment
+    },
+    SET_INFORMATION: (state, information) => {
+      state.information = information
     }
   },
 
@@ -39,10 +39,10 @@ const user = {
           setToken(data.Token)
           commit('SET_TOKEN', data.Token)
           commit('SET_ROLES', data.user.roles)
-          setName(data.user.nickname)
-          commit('SET_NAME', data.user.nickname)
-          setAvatar(data.user.avatar)
-          commit('SET_AVATAR', data.user.avatar)
+          setInformation(data.user)
+          commit('SET_INFORMATION', data.user)
+          setEnvironment(data.environment)
+          commit('SET_ENVIRONMENT', data.environment)
           resolve()
         }).catch(error => {
           reject(error)
@@ -71,8 +71,8 @@ const user = {
           commit('SET_ROLES', [])
           commit('SET_MENUS')
           removeToken()
-          removeAvatar()
-          removeName()
+          removeInformation()
+          removeEnvironment()
           resolve()
         }).catch(error => {
           reject(error)

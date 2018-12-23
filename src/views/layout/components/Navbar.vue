@@ -2,7 +2,7 @@
   <el-menu class="navbar" mode="horizontal">
       <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
       <breadcrumb class="breadcrumb-container"></breadcrumb>
-      <div class="right-menu"> <span class="user-nickname">{{name}}</span >
+      <div class="right-menu"> <span class="user-nickname">{{information.userName}}</span >
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
          <img class="user-avatar" :src="avatar">
@@ -10,17 +10,19 @@
         <el-dropdown-menu slot="dropdown">
           <router-link to="/">
             <el-dropdown-item>
-              主页
+              首页
             </el-dropdown-item>
           </router-link>
-          <router-link to="/account/modifyPassword">
+          <router-link to="/account/personInfo">
+            <el-dropdown-item>
+              个人主页
+            </el-dropdown-item>
+          </router-link>
+          <router-link to="/account/modifyPersonPassword">
             <el-dropdown-item>
               修改密码
             </el-dropdown-item>
           </router-link>
-          <!-- <el-dropdown-item divided>
-            <span @click="modifyPassword" style="display:block;">修改密码</span>
-          </el-dropdown-item> -->
           <el-dropdown-item divided>
             <span @click="logout" style="display:block;">退出登录</span>
           </el-dropdown-item>
@@ -44,7 +46,7 @@ export default {
     Screenfull
   },
   computed: {
-    ...mapGetters(['sidebar', 'avatar', 'name'])
+    ...mapGetters(['sidebar', 'information', 'avatar'])
   },
   methods: {
     toggleSideBar() {
@@ -55,11 +57,10 @@ export default {
         location.reload()
       })
     },
-    modifyPassword() {
-      console.log(1)
+    modifyPersonPassword() {
       this.$store
         .dispatch('addVisitedViews', {
-          path: '/account/modifyPassword',
+          path: '/account/modifyPersonPassword',
           name: '修改密码',
           meta: { title: '修改密码' }
         })

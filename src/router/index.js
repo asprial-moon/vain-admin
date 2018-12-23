@@ -39,7 +39,7 @@ export const asyncRouterMap = [
     children: [
       {
         path: 'config',
-        name: 'config',
+        name: 'Config',
         component: () => import('@/views/system/config'),
         meta: { title: '系统配置', icon: 'config', menu: 'system.config' }
       },
@@ -61,7 +61,7 @@ export const asyncRouterMap = [
     path: '/account',
     component: Layout,
     redirect: 'noredirect',
-    name: 'account',
+    name: 'Account',
     meta: { title: '账号管理', icon: 'account', menu: 'account' },
     children: [
       {
@@ -83,10 +83,17 @@ export const asyncRouterMap = [
         meta: { title: '菜单管理', icon: '3', menu: 'account.menu' }
       },
       {
-        path: 'modifyPassword',
-        name: 'modifyPassword',
-        component: () => import('@/views/account/modifyPassword'),
-        meta: { title: '修改密码', icon: '', menu: 'account.user.modifyPassword' },
+        path: 'modifyPersonPassword',
+        name: 'ModifyPersonPassword',
+        component: () => import('@/views/account/modifyPersonPassword'),
+        meta: { title: '修改密码', icon: '', menu: '' },
+        hidden: true
+      },
+      {
+        path: 'personInfo',
+        name: 'PersonInfo',
+        component: () => import('@/views/account/personInfo'),
+        meta: { title: '个人中心', icon: '', menu: '' },
         hidden: true
       }
     ]

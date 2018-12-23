@@ -23,9 +23,13 @@
 </template>
 <script>
 import { validateUsername, validatePassword } from '@/utils/validate'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'login',
+  computed: {
+    ...mapGetters(['environment'])
+  },
   data() {
     const isValidateUsername = (rule, value, callback) => {
       if (!validateUsername(value)) {
@@ -75,13 +79,27 @@ export default {
             .dispatch('Login', this.loginForm)
             .then(() => {
               this.loading = false
+              console.log(this.environment)
+              if (undefined !== this.environment) {
+                console.log(this.environment)
+                const h = this.$createElement
+                this.$notify({
+                  title: this.environment.name,
+                  message: h(
+                    'i',
+                    { style: 'color: #E6A23C' },
+                    this.environment.description
+                  ),
+                  offset: 100
+                })
+              }
               this.$router.push({ path: '/' })
             })
             .catch(() => {
               this.loading = false
             })
         } else {
-          console.log('erro submit!!')
+          console.log('error submit!!')
           return false
         }
       })
@@ -101,7 +119,6 @@ $light_gray: #eee;
   width: 100%;
   background-color: $bg;
   input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px #293444 inset !important;
     -webkit-text-fill-color: #fff !important;
   }
   input {

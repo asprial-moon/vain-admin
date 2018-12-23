@@ -1,8 +1,9 @@
 import Cookies from 'js-cookie'
 
+const sessionStorage = window.sessionStorage
 const TokenKey = 'Token'
-const NameKey = 'Name'
-const AvatarKey = 'Avatar'
+const Information = 'Information'
+const Environment = 'Environment'
 
 export function getToken() {
   return Cookies.get(TokenKey)
@@ -16,26 +17,26 @@ export function removeToken() {
   return Cookies.remove(TokenKey)
 }
 
-export function getName() {
-  return Cookies.get(NameKey)
+export function getInformation() {
+  return JSON.parse(sessionStorage.getItem(Information))
 }
 
-export function setName(name) {
-  return Cookies.set(NameKey, name)
+export function setInformation(information) {
+  return sessionStorage.setItem(Information, JSON.stringify(information))
 }
 
-export function removeName() {
-  return Cookies.remove(NameKey)
+export function removeInformation() {
+  return sessionStorage.removeItem(Information)
 }
 
-export function getAvatar() {
-  return Cookies.get(AvatarKey)
+export function setEnvironment(environment) {
+  return sessionStorage.setItem(Environment, JSON.stringify(environment))
 }
 
-export function setAvatar(avatar) {
-  return Cookies.set(AvatarKey, avatar)
+export function getEnvironment() {
+  return JSON.parse(sessionStorage.getItem(Environment))
 }
 
-export function removeAvatar() {
-  return Cookies.remove(AvatarKey)
+export function removeEnvironment() {
+  return sessionStorage.removeItem(Environment)
 }
