@@ -38,6 +38,14 @@ public interface BaseService<T extends Entity> {
     T get(T entity) throws ErrorCodeException;
 
     /**
+     * 根据id获取单条数据详情
+     *
+     * @param id
+     * @return
+     */
+    T findById(Integer id) throws ErrorCodeException;
+
+    /**
      * 新增数据
      *
      * @param entity 参数实体

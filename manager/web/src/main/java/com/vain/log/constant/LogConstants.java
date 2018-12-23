@@ -12,6 +12,11 @@ public class LogConstants {
      */
     public static class OperationLogType {
         /**
+         * 默认
+         */
+        public static final int OPERATION_DEFAULT = 0;
+
+        /**
          * 新增
          */
         public static final int OPERATION_ADD = 1;

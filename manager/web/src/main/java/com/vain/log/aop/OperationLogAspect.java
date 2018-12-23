@@ -4,8 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.vain.constant.SystemConfigKeys;
 import com.vain.dao.IRedisDao;
+import com.vain.entity.User;
 import com.vain.log.OperationLog;
+import com.vain.log.constant.LogConstants;
 import com.vain.pool.ThreadPool;
+import com.vain.service.IUserService;
 import com.vain.util.HttpContext;
 import com.vain.util.StringUtils;
 import com.vain.util.TokenUtils;
@@ -41,6 +44,9 @@ public class OperationLogAspect {
     @Autowired
     private ThreadPool pool;
 
+    @Autowired
+    private IUserService userService;
+
     private static final Logger logger = LoggerFactory.getLogger(OperationLogAspect.class);
 
     /**
@@ -62,9 +68,7 @@ public class OperationLogAspect {
         //在当前线程先获取请求中信息
         com.vain.entity.OperationLog log = new com.vain.entity.OperationLog();
         setParameterFromRequest(log);
-        pool.execute(() -> {
-            logServiceHandler(joinPoint, null, log);
-        });
+        pool.execute(() -> logServiceHandler(joinPoint, null, log));
     }
 
     /**
@@ -106,8 +110,17 @@ public class OperationLogAspect {
                             //不保存字段
                             if (null == next.getValue() || "".equals(next.getValue()) || "0".equals(next.getValue()) || "password".equals(next.getKey()) || "createTime".equals(next.getKey())) {
                                 iterator.remove();
-                            } else if ("userName".equals(next.getValue())) {
+                            } else if ("userName".equals(next.getKey())) {
                                 log.setUserName(next.getValue());
+                            }
+                        }
+                        if (LogConstants.OperationLogType.OPERATION_LOGIN == operationLog.operationType() && StringUtils.isNotEmpty(log.getUserName()) && null == log.getId()) {
+                            //登录的时候没有id
+                            User user = new User();
+                            user.setUserName(log.getUserName());
+                            user = userService.get(user);
+                            if (null != user) {
+                                log.setUserId(user.getId());
                             }
                         }
                         log.setOperationData(JSONObject.toJSONString(map));
@@ -173,13 +186,16 @@ public class OperationLogAspect {
     private void setParameterFromRequest(com.vain.entity.OperationLog log) {
         log.setOperationIP(HttpContext.getRemoteAddress());
         HttpServletRequest request = HttpContext.getRequest();
-        String token = request.getHeader(SystemConfigKeys.REQUEST_TOKEN);
-        if (StringUtils.isNotEmpty(token)) {
-            Claims claim = TokenUtils.getClaimFromToken(token);
-            if (null != claim) {
-                log.setUserId((Integer) claim.get("id"));
+        if (null != request) {
+            String token = request.getHeader(SystemConfigKeys.REQUEST_TOKEN);
+            if (StringUtils.isNotEmpty(token)) {
+                Claims claim = TokenUtils.getClaimFromToken(token);
+                if (null != claim) {
+                    log.setUserId((Integer) claim.get("id"));
+                }
             }
         }
+
     }
 
 }

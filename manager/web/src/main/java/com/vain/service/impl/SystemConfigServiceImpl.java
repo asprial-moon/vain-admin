@@ -42,6 +42,11 @@ public class SystemConfigServiceImpl extends AbstractBaseService implements ISys
     }
 
     @Override
+    public SystemConfig findById(Integer id) throws ErrorCodeException {
+        return null;
+    }
+
+    @Override
     public int add(SystemConfig entity) throws ErrorCodeException {
         return 0;
     }

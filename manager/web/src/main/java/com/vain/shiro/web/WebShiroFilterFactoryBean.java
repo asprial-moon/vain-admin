@@ -68,8 +68,8 @@ public class WebShiroFilterFactoryBean extends ShiroFilterFactoryBean {
         filterChainDefinitionMap.put("/user/login", "anon");
         filterChainDefinitionMap.put("/user/logout", "anon");
         filterChainDefinitionMap.put("/user/get/", "anon");
-        filterChainDefinitionMap.put("/user/modifyPersonInfo/", "anon");
-        filterChainDefinitionMap.put("/user/modifyPassword/", "anon");
+        filterChainDefinitionMap.put("/user/modifyPersonInfo", "anon");
+        filterChainDefinitionMap.put("/user/modifyPersonPassword", "anon");
         filterChainDefinitionMap.put("/menu/getMyMenus", "anon");
         filterChainDefinitionMap.put("/upload/uploadPics", "anon");
         filterChainDefinitionMap.put("/druid/**", "anon");

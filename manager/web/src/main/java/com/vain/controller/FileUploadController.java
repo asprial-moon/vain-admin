@@ -49,9 +49,8 @@ public class FileUploadController extends AbstractBaseController<UploadFile> {
             UploadFile uploadFile = new UploadFile(UploadFileType.PHOTO.getType());
             uploadFile.setName(file.getOriginalFilename());
             uploadFile.setLength(file.getSize());
-            uploadFile.setUserId(1);
+            uploadFile.setUserId(currentUserId == null ? 0 : currentUserId);
             uploadFile = uploaderFileComponent.upload(file.getInputStream(), uploadFile, -1);
-            uploadFile.setUserId(currentUserId);
             uploadFileMapper.insert(uploadFile);
             pics.add(uploadFile);
         }

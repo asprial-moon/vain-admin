@@ -2,6 +2,7 @@ package com.vain.mapper;
 
 import com.vain.base.dao.BaseDao;
 import com.vain.entity.User;
+import io.lettuce.core.dynamic.annotation.Param;
 
 /**
  * @author vain
@@ -9,23 +10,6 @@ import com.vain.entity.User;
  * @date 2017/8/31 11:57
  */
 public interface UserMapper extends BaseDao<User> {
-
-
-    /**
-     * 获取分页数据
-     *
-     * @param entity   参数实体
-     * @param curPage  当前页码
-     * @param pageSize 每页大小
-     * @return
-     */
-/*
-    public PageInfo<User> getPagedList(User entity, int curPage, int pageSize) {
-        PageHelper.startPage(curPage, pageSize);
-        List<User> users = userService.getList(entity);
-        return new PageInfo<>(users);
-    }
-*/
 
     /**
      * 重置密码
@@ -42,4 +26,12 @@ public interface UserMapper extends BaseDao<User> {
      * @return
      */
     int lock(User entity);
+
+    /**
+     * 根据id 获取数据
+     *
+     * @param id
+     * @return
+     */
+    User getById(@Param("id") Integer id);
 }

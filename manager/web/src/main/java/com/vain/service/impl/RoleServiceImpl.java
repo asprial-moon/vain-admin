@@ -52,6 +52,11 @@ public class RoleServiceImpl extends AbstractBaseService implements IRoleService
     }
 
     @Override
+    public Role findById(Integer id) throws ErrorCodeException {
+        return null;
+    }
+
+    @Override
     public int add(Role entity) throws ErrorCodeException {
         return roleMapper.insert(entity);
     }

@@ -23,9 +23,9 @@ public class TokenUtils {
     private static final String secret = "defaultSecret";
 
     /**
-     * #7天 单位:秒
+     * #30分 单位:秒
      */
-    public static final Long expiration = 604800L;
+    public static final Long expiration = 1800L;
 
     /**
      * subject

@@ -3,8 +3,10 @@ package com.vain.controller;
 import com.vain.base.controller.AbstractBaseController;
 import com.vain.base.entity.Response;
 import com.vain.common.ErrorCodeException;
+import com.vain.component.SysConfigComponent;
 import com.vain.constant.SystemConfigKeys;
 import com.vain.dao.IRedisDao;
+import com.vain.entity.SystemConfig;
 import com.vain.entity.User;
 import com.vain.enums.StatusCode;
 import com.vain.log.OperationLog;
@@ -12,6 +14,8 @@ import com.vain.log.constant.LogConstants;
 import com.vain.service.IUserService;
 import com.vain.shiro.exception.AuthenticationException;
 import com.vain.shiro.token.AccountToken;
+import com.vain.util.MD5Utils;
+import com.vain.util.StringUtils;
 import com.vain.util.TokenUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -36,6 +40,9 @@ public class UserController extends AbstractBaseController<User> {
 
     @Autowired
     private IRedisDao redisDao;
+
+    @Autowired
+    private SysConfigComponent sysConfigComponent;
 
     /**
      * 获取账号列表 （超级管理员不在此列） 分页
@@ -102,24 +109,6 @@ public class UserController extends AbstractBaseController<User> {
     }
 
     /**
-     * 修改个人信息
-     *
-     * @param entity 参数实体
-     * @return
-     * @throws Exception
-     */
-    @PostMapping(value = "/modifyPersonInfo")
-    public Response<User> modifyPersonInfo(@RequestBody User entity) {
-        if (entity == null || entity.getId() == null) {
-            throwNewErrorCodeException(StatusCode.PARAMETER_ERROR);
-        }
-        if (!entity.getId().equals(getCurrentUserId())) {
-            throwNewErrorCodeException(StatusCode.FORBIDDEN);
-        }
-        return new Response<User>().setData(userService.modify(entity));
-    }
-
-    /**
      * 删除账号 （更新标识符）
      *
      * @param entity 参数实体
@@ -165,8 +154,6 @@ public class UserController extends AbstractBaseController<User> {
             throwNewErrorCodeException(StatusCode.ACCOUNT_NOT_EXIST);
         }
         Map<String, Object> claims = new HashMap<>(3);
-        claims.put("id", user.getId());
-        claims.put("name", user.getUserName());
         claims.put("type", user.getType());
         String jwtToken = TokenUtils.generateToken(claims, TokenUtils.subject);
         //缓存token
@@ -175,6 +162,9 @@ public class UserController extends AbstractBaseController<User> {
         user.clearSecretField();
         data.put("user", user);
         data.put(SystemConfigKeys.REQUEST_TOKEN, jwtToken);
+        //项目环境
+        SystemConfig environment = sysConfigComponent.getSystemConfig(SystemConfigKeys.SYS_ENVIRONMENT);
+        data.put("environment", environment);
         response.setData(data);
         return response;
     }
@@ -208,21 +198,60 @@ public class UserController extends AbstractBaseController<User> {
     }
 
     /**
-     * 修改用户密码
+     * 修改用户信息
      *
      * @param entity
      * @return
      * @throws ErrorCodeException
      */
-    @PostMapping(value = "/modifyPassword")
-    public Response modifyPassword(@RequestBody User entity) throws ErrorCodeException {
-        if (entity == null || entity.getNewpasswd() == null) {
+    @PostMapping(value = "/modifyPersonInfo")
+    public Response modifyPersonInfo(@RequestBody User entity) throws ErrorCodeException {
+        if (entity == null) {
             throwNewErrorCodeException(StatusCode.PARAMETER_ERROR);
         }
-        entity.setId(getCurrentUserId());
-        return new Response().setData(userService.resetPwd(entity));
+        Integer currentUserId = this.getCurrentUserId();
+        User dbUser = userService.findById(currentUserId);
+        if (null == dbUser) {
+            throwNewErrorCodeException(StatusCode.ACCOUNT_NOT_EXIST);
+        }
+        if (!dbUser.getId().equals(currentUserId)) {
+            throwNewErrorCodeException(StatusCode.FORBIDDEN);
+        }
+        entity.setId(currentUserId);
+        entity.clearSecretField();
+        entity.setUserName("");
+        return new Response().setData(userService.modify(entity));
     }
 
+    /**
+     * 修改个人登录密码
+     *
+     * @param entity
+     * @return
+     * @throws ErrorCodeException
+     */
+    @PostMapping(value = "/modifyPersonPassword")
+    public Response modifyPersonPassword(@RequestBody User entity) throws ErrorCodeException {
+        if (entity == null || StringUtils.isEmpty(entity.getNewpasswd())) {
+            throwNewErrorCodeException(StatusCode.PARAMETER_ERROR);
+        }
+        if (StringUtils.isEmpty(entity.getPassword())) {
+            throwNewErrorCodeException(StatusCode.ACCOUNT_PASSWORD_ERROR);
+        }
+        Integer currentUserId = getCurrentUserId();
+        if (null != currentUserId) {
+            entity.setId(currentUserId);
+            User dbUser = userService.findById(currentUserId);
+            if (null == dbUser) {
+                throwNewErrorCodeException(StatusCode.ACCOUNT_NOT_EXIST);
+            }
+            String md5Encrypt = MD5Utils.getMD5Str(entity.getPassword() + dbUser.getSalt());
+            if (!dbUser.getPassword().equals(md5Encrypt)) {
+                throwNewErrorCodeException(StatusCode.ACCOUNT_PASSWORD_ERROR);
+            }
+        }
+        return new Response().setData(userService.resetPwd(entity));
+    }
 
     /**
      * 锁定 / 解锁 账号

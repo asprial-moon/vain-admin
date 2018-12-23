@@ -24,17 +24,21 @@ public class SysConfigComponent {
     @Resource
     private SystemConfigMapper sysConfigDao;
 
-    private HashMap<String, String> configMapFromDb = new HashMap<>();
+    private HashMap<String, SystemConfig> configMapFromDb = new HashMap<>();
 
     public void loadSystemConfigFromDb() {
         List<SystemConfig> sysConfigs = sysConfigDao.getList(null);
         if (!CollectionUtils.isEmpty(sysConfigs)) {
-            sysConfigs.forEach(systemConfig -> configMapFromDb.put(systemConfig.getCode(), systemConfig.getValue()));
+            sysConfigs.forEach(systemConfig -> configMapFromDb.put(systemConfig.getCode(), systemConfig));
         }
         log.info("加载{}项系统配置", sysConfigs == null ? 0 : sysConfigs.size());
     }
 
     public String getStringValue(String key) {
+        return null == configMapFromDb.get(key) ? "" : configMapFromDb.get(key).getValue();
+    }
+
+    public SystemConfig getSystemConfig(String key) {
         return configMapFromDb.get(key);
     }
 

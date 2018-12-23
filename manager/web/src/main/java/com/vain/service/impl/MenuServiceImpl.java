@@ -264,6 +264,11 @@ public class MenuServiceImpl extends AbstractBaseService implements IMenuService
     }
 
     @Override
+    public Menu findById(Integer id) throws ErrorCodeException {
+        return null;
+    }
+
+    @Override
     public int add(Menu entity) throws ErrorCodeException {
         return 0;
     }

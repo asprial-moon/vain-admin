@@ -1,11 +1,9 @@
 package com.vain.entity;
 
 import com.vain.base.entity.PagedEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,7 +11,8 @@ import java.util.List;
  * @description: 用户信息实体类
  * @date 2017/8/31 11:57
  */
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends PagedEntity {
@@ -57,7 +56,7 @@ public class User extends PagedEntity {
     /**
      * 生日
      */
-    private Timestamp birthday;
+    private Date birthday;
 
     /**
      * 是否锁定0-正常1-锁定
@@ -70,11 +69,11 @@ public class User extends PagedEntity {
     /**
      * 创建时间
      */
-    private Timestamp createTime;
+    private Date createTime;
     /**
      * 最后修改时间
      */
-    private Timestamp modifyTime;
+    private Date modifyTime;
 
     /**
      * 新密码

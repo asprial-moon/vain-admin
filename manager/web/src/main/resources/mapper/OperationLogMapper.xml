@@ -27,7 +27,7 @@
                 </foreach>
             </if>
         </where>
-        ORDER  BY createTime DESC
+        ORDER BY createTime DESC
     </select>
 
     <delete id="delete" parameterType="com.vain.entity.OperationLog">
@@ -44,5 +44,17 @@
             </if>
         </where>
     </delete>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+        SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_operation_log
+        (operationType,operationData,operationIP,className,methodName,createTime,info,exceptionMessage,userId)
+        VALUES
+        <foreach collection ="list" item="log" index= "index" separator =",">
+            (#{log.operationType},#{log.operationData},#{log.operationIP},#{log.className},#{log.methodName},now(),#{log.info},#{log.exceptionMessage},#{log.userId})
+        </foreach>
+    </insert>
 
 </mapper>

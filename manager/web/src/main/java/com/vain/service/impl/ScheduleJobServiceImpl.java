@@ -53,6 +53,11 @@ public class ScheduleJobServiceImpl extends AbstractBaseService implements ISche
     }
 
     @Override
+    public ScheduleJob findById(Integer id) throws ErrorCodeException {
+        return null;
+    }
+
+    @Override
     public int add(ScheduleJob entity) throws ErrorCodeException {
         //状态为开启的才添加
         if (entity == null || ScheduleStatus.RUN.getState() != entity.getJobStatus()) {

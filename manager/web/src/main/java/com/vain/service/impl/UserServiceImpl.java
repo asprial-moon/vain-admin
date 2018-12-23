@@ -173,6 +173,11 @@ public class UserServiceImpl extends AbstractBaseService implements IUserService
         return userMapper.get(entity);
     }
 
+    @Override
+    public User findById(Integer id) throws ErrorCodeException {
+        return userMapper.getById(id);
+    }
+
     /**
      * 添加账号
      *

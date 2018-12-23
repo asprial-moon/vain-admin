@@ -4,7 +4,7 @@ server:
     context-path: /vain/api
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/vain?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    url: jdbc:mysql://118.24.103.116:3306/vain?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false
     username: root
     password: vain123
     driver-class-name: com.mysql.jdbc.Driver
@@ -37,7 +37,7 @@ spring:
   aop:
     proxy-target-class: true
   redis:
-    host: localhost
+    host: 118.24.103.116
     database: 0
     port: 6379
     password: redis123

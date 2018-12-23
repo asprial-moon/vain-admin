@@ -12,4 +12,6 @@ public interface OperationLogMapper {
     int insert(OperationLog operationLog);
 
     int delete(OperationLog operationLog);
+
+    int insertBatch(List<OperationLog> operationLogList);
 }

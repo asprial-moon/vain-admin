@@ -20,7 +20,6 @@ public class OperationServiceImpl extends AbstractBaseService implements IOperat
     @Resource
     private OperationLogMapper operationLogMapper;
 
-
     @Override
     public PageInfo<OperationLog> getPagedList(OperationLog entity) throws ErrorCodeException {
         entity.initPageParam();
@@ -35,6 +34,11 @@ public class OperationServiceImpl extends AbstractBaseService implements IOperat
 
     @Override
     public OperationLog get(OperationLog entity) throws ErrorCodeException {
+        return null;
+    }
+
+    @Override
+    public OperationLog findById(Integer id) throws ErrorCodeException {
         return null;
     }
 
@@ -54,5 +58,13 @@ public class OperationServiceImpl extends AbstractBaseService implements IOperat
             return operationLogMapper.delete(entity);
         }
         return 0;
+    }
+
+    @Override
+    public int addBatch(List<OperationLog> operationLogList) {
+        if (CollectionUtils.isEmpty(operationLogList)) {
+            return 0;
+        }
+        return operationLogMapper.insertBatch(operationLogList);
     }
 }

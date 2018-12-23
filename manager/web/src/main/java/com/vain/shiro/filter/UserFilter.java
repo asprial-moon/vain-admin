@@ -62,10 +62,8 @@ public class UserFilter extends AuthorizationFilter {
                 String value = redisDao.getValue(token);
                 List<String> menuList = JSON.parseArray(value, String.class);
                 if (!CollectionUtils.isEmpty(menuList)) {
-                    for (String perm : perms) {
-                        if (menuList.contains(perm)) {
-                            return true;
-                        }
+                    if (menuList.parallelStream().anyMatch(perms[0]::contains)) {
+                        return true;
                     }
                 }
             } else {
@@ -82,12 +80,8 @@ public class UserFilter extends AuthorizationFilter {
                 user.setId(Integer.valueOf(id));
                 HashSet<Menu> myMenus = menuService.getMenusByUserId(Integer.valueOf(id), 0);
                 redisDao.cacheValue(token, JSON.toJSONString(myMenus), TokenUtils.expiration);
-                for (Menu menu : myMenus) {
-                    for (String perm : perms) {
-                        if (menu.getMenuKey().equals(perm)) {
-                            return true;
-                        }
-                    }
+                if (myMenus.parallelStream().anyMatch(menu -> perms[0].equals(menu.getMenuKey()))) {
+                    return true;
                 }
             }
         }

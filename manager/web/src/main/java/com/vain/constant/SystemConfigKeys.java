@@ -98,4 +98,9 @@ public class SystemConfigKeys {
      */
 
     public static final String OPERATION_LOG_KEY = "OPERATION_LOG";
+
+    /**
+     * 系统运行环境
+     */
+    public static final String SYS_ENVIRONMENT = "SYS_ENVIRONMENT";
 }

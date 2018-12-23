@@ -6,15 +6,15 @@
 
     <groupId>com.vain.web</groupId>
     <artifactId>web</artifactId>
-    <version>1.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+    <version>${project.parent.version}</version>
+    <packaging>jar</packaging>
 
 
     <parent>
         <groupId>com.vain.admin</groupId>
         <artifactId>vain</artifactId>
         <version>1.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <dependencies>
         <dependency>
@@ -23,28 +23,28 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
-	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<mainClass>com.vain.Application</mainClass>
-				</configuration>
-				 <executions>
-				  <execution>
-					<goals>
-					  <goal>
-						repackage
-					  </goal>
-					</goals>
-				  </execution>
-				</executions>
-			</plugin>
-		</plugins>
-		
-		<resources>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.vain.Application</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>
+                                repackage
+                            </goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <resources>
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
@@ -59,14 +59,14 @@
                     <include>**/*.properties</include>
                 </includes>
             </resource>
-			<resource>
+            <resource>
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.yml</include>
                     <include>**/*.properties</include>
                 </includes>
             </resource>
-        </resources> 
-		
-	</build>
+        </resources>
+
+    </build>
 </project>

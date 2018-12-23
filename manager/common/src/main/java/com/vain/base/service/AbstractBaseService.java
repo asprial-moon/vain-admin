@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author vain
- * @description: sevice类的抽象类
+ * @description: service类的抽象类
  * @date 2017/8/31 11:49
  */
 @Slf4j

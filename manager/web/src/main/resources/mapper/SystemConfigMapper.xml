@@ -29,7 +29,6 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 			<if test="type != null">
 				and type = #{type}
 			</if>
-			and visible = 1
 		</where>
 		order by modifyTime desc
 	</select>

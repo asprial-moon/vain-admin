@@ -26,15 +26,18 @@ public abstract class AbstractBaseController<T extends Entity> implements BaseCo
 
     protected Integer getCurrentUserId() {
         HttpServletRequest request = HttpContext.getRequest();
-        String token = request.getHeader("Token");
-        if (StringUtils.isEmpty(token)) {
-            return null;
+        if (null != request) {
+            String token = request.getHeader("Token");
+            if (StringUtils.isEmpty(token)) {
+                return null;
+            }
+            Claims claim = TokenUtils.getClaimFromToken(token);
+            if (null == claim) {
+                return null;
+            }
+            return (Integer) claim.get("id");
         }
-        Claims claim = TokenUtils.getClaimFromToken(token);
-        if (null == claim) {
-            return null;
-        }
-        return (Integer) claim.get("id");
+        return 0;
     }
 
 }

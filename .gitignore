@@ -1,4 +1,11 @@
+/target/
+.classpath
+/.settings/
+.project
+.DS_Store
+*generatorConfig.xml
+target
+.txt
+*.log
 *iml
-.idea
-.target
-.logs
+node_modules

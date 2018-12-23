@@ -66,7 +66,7 @@
         SELECT
         t_user.*,
         t_role.name AS roleName,
-        t_role.id   AS roleId
+        t_role.id AS roleId
         FROM t_user
         LEFT JOIN t_user_role ON t_user.id = t_user_role.userId
         LEFT JOIN t_role ON t_role.id = t_user_role.roleId
@@ -184,5 +184,9 @@
             </choose>
         </where>
     </update>
+
+    <select id="getById" parameterType="java.lang.Integer" resultType="com.vain.entity.User">
+        SELECT  * FROM t_user WHERE id = #{id}
+    </select>
 
 </mapper>

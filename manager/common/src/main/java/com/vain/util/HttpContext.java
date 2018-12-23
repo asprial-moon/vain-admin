@@ -20,47 +20,36 @@ public class HttpContext {
     private final static String X_REQUEST = "X-Requested-With";
     private final static String XML_HTTP_REQUEST = "XMLHttpRequest";
 
-    public final static HttpServletResponse getResponse() {
-        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+    public static HttpServletResponse getResponse() {
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        return requestAttributes == null ? null : requestAttributes.getResponse();
     }
 
-    public final static HttpServletRequest getRequest() {
-        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+    public static HttpServletRequest getRequest() {
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        return requestAttributes == null ? null : requestAttributes.getRequest();
     }
 
-    public final static HttpSession getSession() {
-        return HttpContext.getRequest().getSession();
-    }
-
-    public final static void setSessionAttritube(String name, Object value) {
-        HttpContext.getSession().setAttribute(name, value);
-    }
-
-    public final static Object getSessionAttritube(String name) {
-        return HttpContext.getSession().getAttribute(name);
-    }
-
-    public final static void removeAttritube(String name) {
-        HttpContext.getSession().removeAttribute(name);
-    }
-
-    public final static String getRemoteAddress() {
+    public static String getRemoteAddress() {
         HttpServletRequest request = HttpContext.getRequest();
-        String ip = request.getHeader(X_FORWARDED_FOR);
-        if (ip != null && (ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip))) {
-            ip = request.getHeader(PROXY_CLIENT_IP);
+        if (null != request) {
+            String ip = request.getHeader(X_FORWARDED_FOR);
+            if (ip != null && (ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip))) {
+                ip = request.getHeader(PROXY_CLIENT_IP);
+            }
+            if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader(WL_PROXY_CLIENT_IP);
+            }
+            if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getRemoteAddr();
+            }
+            return ip;
         }
-        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
-            ip = request.getHeader(WL_PROXY_CLIENT_IP);
-        }
-        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
+        return null;
     }
 
-    public final static boolean isAjax() {
-        String requestType = getRequest().getHeader(X_REQUEST);
+    public static boolean isAjax() {
+        String requestType = null == getRequest() ? null : getRequest().getHeader(X_REQUEST);
         return requestType != null && requestType.equals(XML_HTTP_REQUEST);
     }
 
