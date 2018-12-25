@@ -2,9 +2,7 @@ package com.vain.entity;
 
 
 import com.vain.base.entity.PagedEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -13,7 +11,8 @@ import java.sql.Timestamp;
  * @date： 2017/10/31 11:40
  * @description： 定时任务实体类 t_schedule_job
  */
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ScheduleJob extends PagedEntity {

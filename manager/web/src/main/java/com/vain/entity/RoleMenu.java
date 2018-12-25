@@ -2,9 +2,7 @@ package com.vain.entity;
 
 
 import com.vain.base.entity.PagedEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -13,7 +11,8 @@ import java.sql.Timestamp;
  * @date： 2017/10/11 15:04
  * @description： t_role_menu对应的实体类
  */
-@Data
+@Setter
+@Getter
 public class RoleMenu extends PagedEntity {
 
     /**

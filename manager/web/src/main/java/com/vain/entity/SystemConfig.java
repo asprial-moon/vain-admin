@@ -2,8 +2,9 @@ package com.vain.entity;
 
 import com.vain.base.entity.PagedEntity;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
@@ -12,7 +13,8 @@ import java.sql.Timestamp;
  * @description: 系统组件配置实体
  * @date 2017/8/31 11:57
  */
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class SystemConfig extends PagedEntity {

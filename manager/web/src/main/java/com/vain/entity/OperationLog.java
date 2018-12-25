@@ -2,8 +2,9 @@ package com.vain.entity;
 
 import com.vain.base.entity.PagedEntity;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
@@ -13,7 +14,8 @@ import java.util.List;
  * @date： 2017/11/3 11:12
  * @description： 日志实体类
  */
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class OperationLog extends PagedEntity {

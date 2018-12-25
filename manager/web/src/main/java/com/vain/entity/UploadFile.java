@@ -3,8 +3,9 @@ package com.vain.entity;
 import com.vain.base.entity.PagedEntity;
 import com.vain.util.DateUtils;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -14,7 +15,8 @@ import java.util.Calendar;
  * @date 2017/11/7 21:23
  * @description 上传文件实体
  */
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UploadFile extends PagedEntity {

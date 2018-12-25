@@ -2,9 +2,7 @@ package com.vain.entity;
 
 
 import com.vain.base.entity.PagedEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -13,7 +11,8 @@ import java.sql.Timestamp;
  * @date： 2017/10/21 18:01
  * @description： 用户-角色对应表
  */
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRole extends PagedEntity {
