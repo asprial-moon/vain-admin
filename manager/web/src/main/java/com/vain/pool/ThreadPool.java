@@ -24,7 +24,7 @@ public class ThreadPool {
     /**
      * 最少线程数
      */
-    private int corePoolSize = 1;
+    private int corePoolSize = 2;
     /**
      * 线程池缓冲队列大小.
      */

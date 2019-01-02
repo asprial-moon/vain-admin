@@ -7,8 +7,11 @@ import com.vain.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequestBuilder;
 import org.elasticsearch.action.get.GetResponse;
@@ -27,8 +30,8 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +68,28 @@ public class ElasticsearchComponent {
                     .execute()
                     .actionGet();
             log.info("index {} execute {}", index, execute.isAcknowledged());
+        }
+        return true;
+    }
+
+    /**
+     * 创建索引
+     *
+     * @param index
+     * @return
+     */
+    public boolean deleteIndex(String index) {
+        if (StringUtils.isEmpty(index)) {
+            return false;
+        }
+        if (!isIndexExist(index)) {
+            log.info("index {} in not exist", index);
+            DeleteIndexResponse deleteIndexResponse = client.admin()
+                    .indices()
+                    .prepareDelete(index)
+                    .execute()
+                    .actionGet();
+            log.info("index {} execute {}", index, deleteIndexResponse.isAcknowledged());
         }
         return true;
     }
@@ -109,6 +134,32 @@ public class ElasticsearchComponent {
             return indexResponse.getId();
         }
         return "";
+    }
+
+
+    /**
+     * 批量添加数据
+     *
+     * @param objects 数据
+     * @param index   索引
+     * @param type    类型
+     * @return 创建最后的id
+     */
+    public Integer addBatch(List<JSONObject> objects, String index, String type) {
+        if (StringUtils.isNotEmpty(index) && StringUtils.isNotEmpty(type)) {
+            BulkRequestBuilder bulkRequestBuilder = client.prepareBulk();
+            if (!CollectionUtils.isEmpty(objects)) {
+                for (JSONObject object : objects) {
+                    bulkRequestBuilder.add(client.prepareIndex(index, type,
+                            StringUtils.isNotEmpty(object.getString("id")) ? object.getString("id") : UUID.randomUUID().toString().replaceAll("-", ""))
+                            .setSource(object));
+                }
+            }
+            BulkResponse bulkResponse = bulkRequestBuilder.execute().actionGet();
+            log.info("index {} type {} add batch response status {}  tookInMills {}", index, type, bulkResponse.status().getStatus(), bulkResponse.getTookInMillis());
+            return bulkResponse.getItems().length;
+        }
+        return 0;
     }
 
     public String add(JSONObject object, String index, String type) {
@@ -162,7 +213,7 @@ public class ElasticsearchComponent {
      * @param fieIds 逗号分隔需要的字段 默认为全部字段
      * @return
      */
-    public Map<String, Object> get(@NotNull String index, String type, String id, String fieIds) {
+    public Map<String, Object> get(String index, String type, String id, String fieIds) {
         if (StringUtils.isNotEmpty(index) && StringUtils.isNotEmpty(type) && StringUtils.isNotEmpty(id)) {
             GetRequestBuilder getRequestBuilder = client.prepareGet(index, type, id);
             if (StringUtils.isNotEmpty(fieIds)) {
@@ -218,7 +269,7 @@ public class ElasticsearchComponent {
      * @param type           类型名称 多个用逗号隔开
      * @param startTime      开始时间
      * @param endTime        结束时间
-     * @param size           大小限制 默认10
+     * @param pageSize       大小限制 默认10
      * @param fields         需要显示的字段 默认为全部
      * @param sortFields     排序字段
      * @param matchPhrase    是否精准匹配
@@ -266,9 +317,11 @@ public class ElasticsearchComponent {
         //匹配条件
         if (null != matchString) {
             for (Map.Entry<String, Object> match : matchString.entrySet()) {
-                boolQueryBuilder.should(matchPhrase ?
-                        QueryBuilders.matchPhraseQuery(match.getKey(), match.getValue()) :
-                        QueryBuilders.matchQuery(match.getKey(), match.getValue()));
+                if (null != match.getValue() && !"".equals(match.getValue())){
+                    boolQueryBuilder.should(matchPhrase ?
+                            QueryBuilders.matchPhraseQuery(match.getKey(), match.getValue()) :
+                            QueryBuilders.matchQuery(match.getKey(), match.getValue()));
+                }
             }
         }
         //高亮字段

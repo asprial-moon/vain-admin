@@ -2,15 +2,17 @@ package com.vain.base.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author vain
  * @description: 分类实体父类
  * @date 2017/8/31 11:42
  */
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class PagedEntity extends Entity {

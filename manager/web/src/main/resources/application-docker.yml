@@ -56,6 +56,12 @@ spring:
         url: http://monitor:8000
         instance:
           name: vain-admin
+  data:
+    elasticsearch:
+      ip: localhost
+      port: 9300
+      pool: 5
+      cluster-name: vain-cluster
 logging:
   config: classpath:log4j2.xml
   file: logs/vain.log
