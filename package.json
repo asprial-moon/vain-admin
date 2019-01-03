@@ -6,13 +6,16 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "prod": "webpack-prod-server --inline --progress --config build/webpack.prod.conf.js",
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js"
   },
   "dependencies": {
     "axios": "0.17.1",
+    "dist": "^0.1.2",
     "element-ui": "2.3.4",
+    "env": "0.0.2",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-node": "^6.0.1",
@@ -23,6 +26,7 @@
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "postcss-url": "^7.3.2",
+    "prod": "^1.0.1",
     "screenfull": "^3.3.2",
     "vue": "2.5.10",
     "vue-router": "3.0.1",

@@ -31,7 +31,7 @@
       </el-table-column>
       <el-table-column label="操作数据" align="center">
           <template slot-scope="scope">
-            <span> {{scope.row.operationData}}</span>
+            <span v-html="scope.row.operationData"></span>
           </template>
       </el-table-column>
       <el-table-column label="操作时间" width="200" prop="created_at" align="center">
@@ -128,7 +128,8 @@ export default {
       getLogList({
         currentPage: this.currentPage,
         pageSize: this.pageSize,
-        operationTypes: this.listQuery.type
+        operationTypes: this.listQuery.type,
+        operationData: this.listQuery.operationData
       }).then(reponse => {
         this.list = reponse.dataList
         this.totalPage = reponse.totalSize
