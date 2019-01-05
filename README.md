@@ -32,6 +32,7 @@
  - Spring Boot Admin 
  - aliyun-OSS
  - Lombok
+ - Elasticsearch
 
 #### 本地项目运行
  web 分支为前端项目源码  
@@ -54,7 +55,7 @@
 #### 打包静态文件
  现将config下的prod.env.js中BASE_API修改为改动后的IP地址  
  在web分支中运行
- > npm install prod.env.js  
+ >  npm run build prod.env  
  
  将生成后的dist文件拷贝到nginx的dist的目录下
 
