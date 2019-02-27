@@ -30,6 +30,7 @@
         <simpleImage>1.2.0</simpleImage>
         <com.apache.common-lang>2.6</com.apache.common-lang>
         <spring-boot-admin-client>2.0.1</spring-boot-admin-client>
+        <guava>27.0.1-jre</guava>
     </properties>
 
     <parent>
@@ -169,6 +170,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava}</version>
         </dependency>
     </dependencies>
     <repositories>

@@ -3,7 +3,8 @@ package com.vain.shiro.web;
 import com.vain.shiro.filter.PermissionFilterManager;
 import com.vain.shiro.filter.UrlFilter;
 import com.vain.shiro.filter.UserFilter;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.util.Nameable;
@@ -23,7 +24,8 @@ import java.util.Map;
  * @date 2018/6/2 20:49
  */
 @Slf4j
-@Data
+@Setter
+@Getter
 public class WebShiroFilterFactoryBean extends ShiroFilterFactoryBean {
 
     /**

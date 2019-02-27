@@ -1,13 +1,15 @@
 package com.vain.shiro.exception;
 
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by vain on 2017/9/19.
  * 继承shiro的异常 在执行自己登录逻辑时 主动抛出的异常
  */
-@Data
+@Setter
+@Getter
 public class AuthenticationException extends org.apache.shiro.authc.AuthenticationException {
 
     /**

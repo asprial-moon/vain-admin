@@ -3,7 +3,8 @@ package com.vain.shiro.filter;
 import com.vain.entity.Menu;
 import com.vain.service.IMenuService;
 import com.vain.util.StringUtils;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.web.filter.mgt.DefaultFilterChainManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 初始化时候读取菜单列表 并根据对应的url设置mapValue
  */
 @Slf4j
-@Data
+@Setter
+@Getter
 public class PermissionFilterManager extends DefaultFilterChainManager {
 
     @Autowired

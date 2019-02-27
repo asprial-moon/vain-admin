@@ -317,7 +317,7 @@ public class ElasticsearchComponent {
         //匹配条件
         if (null != matchString) {
             for (Map.Entry<String, Object> match : matchString.entrySet()) {
-                if (null != match.getValue() && !"".equals(match.getValue())){
+                if (null != match.getValue() && !"".equals(match.getValue())) {
                     boolQueryBuilder.should(matchPhrase ?
                             QueryBuilders.matchPhraseQuery(match.getKey(), match.getValue()) :
                             QueryBuilders.matchQuery(match.getKey(), match.getValue()));

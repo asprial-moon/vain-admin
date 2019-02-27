@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import com.vain.enums.StatusCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.apache.shiro.util.CollectionUtils;
 
 import java.sql.Timestamp;
 import java.util.List;
